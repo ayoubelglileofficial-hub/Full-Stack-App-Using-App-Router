@@ -302,7 +302,7 @@ export function Header() {
                         </Sheet>
                     </div>
                 </div>
-                <div className="flex items-center mt-20 mx-10">
+                {/* <div className="flex items-center mt-20 mx-10">
                     {paths.map((path, index) => {
                         const href = "/" + paths.slice(0, index + 1).join("/");
                         const isLast = index === paths.length - 1;
@@ -327,7 +327,7 @@ export function Header() {
                             </React.Fragment>
                         );
                     })}
-                </div>
+                </div> */}
             </div>
         </header>
     );
