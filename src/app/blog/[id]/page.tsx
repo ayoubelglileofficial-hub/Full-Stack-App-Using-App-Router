@@ -1,10 +1,154 @@
+import Link from 'next/link'
 import React from 'react'
+import blogItems from '../dbBlog'
+import NotFound from '@/app/not-found'
+import Image from 'next/image'
 
-const BlogPost = () => {
-  return (
-      <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-        BlogPost
+const BlogPost = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params
+  
+
+  const blogItem = blogItems.find((i) => i.url === `/blog/${id}`)
+  
+  await new Promise((res) => setTimeout(res, 1500)); // simulate delay
+  
+  
+  if (!blogItem) {
+    return (
+      <NotFound/>
+    )
+  }
+  const trendingItems = blogItems.filter((i) => i.trend && i.id !== blogItem.id)
+ return (
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      <div className="max-w-[1400px] mx-auto px-4 py-10">
+
+        {/* 3-column grid: 70% | 25% | 5% */}
+        <div className="flex gap-6">
+
+          {/* ── 70% — Main Content ── */}
+          <main className="w-[70%] shrink-0">
+
+            {/* Hero Image */}
+            <div className="relative w-full h-[420px] rounded-2xl overflow-hidden shadow-lg mb-8">
+              <Image
+                src={blogItem.img || '/placeholder.jpg'}
+                alt={blogItem.title}
+                fill
+                className="object-cover"
+              />
+              {/* gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6">
+                <span className="inline-block text-xs font-semibold uppercase tracking-widest text-blue-300 mb-2">
+                  Featured Project
+                </span>
+                <h1 className="text-4xl font-extrabold text-white leading-tight drop-shadow">
+                  {blogItem.title}
+                </h1>
+              </div>
+            </div>
+
+            {/* Short description */}
+            <p className="text-base text-zinc-500 dark:text-zinc-400 italic border-l-4 border-blue-500 pl-4 mb-8 leading-relaxed">
+              {blogItem.shortDesc}
+            </p>
+
+            {/* Full content paragraphs */}
+            <article className="space-y-6">
+              {blogItem.desc?.map((paragraph, i) => (
+                <p
+                  key={i}
+                  className="text-zinc-700 dark:text-zinc-300 text-[1.05rem] leading-[1.85] tracking-wide"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </article>
+
+            {/* Back link */}
+            <div className="mt-12 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline transition"
+              >
+                ← Back to all posts
+              </Link>
+            </div>
+          </main>
+
+          {/* ── 25% — Sticky Sidebar ── */}
+          <aside className="w-[25%] shrink-0">
+            <div
+              className="sticky top-6 h-[calc(100vh-3rem)] flex flex-col gap-4
+                         overflow-y-auto
+                         [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
+              {/* Sidebar header */}
+              <div className="pb-2 border-b border-zinc-200 dark:border-zinc-800">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                  Trending
+                </h2>
+              </div>
+
+              {/* Trending cards */}
+              {trendingItems.length > 0 ? (
+                trendingItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.url || '#'}
+                    className="group flex flex-col rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800
+                               bg-white dark:bg-zinc-900
+                               shadow-sm hover:shadow-md transition-shadow duration-200"
+                  >
+                    {/* Card image */}
+                    <div className="relative w-full h-[130px]">
+                      <Image
+                        src={item.img || '/placeholder.jpg'}
+                        alt={item.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+
+                    {/* Card body */}
+                    <div className="p-3">
+                      <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-blue-500 mb-1">
+                        Trending
+                      </span>
+                      <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-100 leading-snug mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
+                        {item.shortDesc}
+                      </p>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-xs text-zinc-400 dark:text-zinc-600 italic">
+                  No trending posts right now.
+                </p>
+              )}
+
+              {/* Ad / promo block */}
+              <div className="mt-2 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900 p-4 text-center">
+                <p className="text-[10px] uppercase tracking-widest text-zinc-400 mb-1">Sponsored</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">Your ad could be here.</p>
+              </div>
+            </div>
+          </aside>
+
+          {/* ── 5% — Spacer / separator ── */}
+          <div className="w-[5%] shrink-0" aria-hidden="true">
+            <div className="sticky top-6 h-[calc(100vh-3rem)] flex justify-center">
+              <div className="w-px h-full bg-gradient-to-b from-transparent via-zinc-300 dark:via-zinc-700 to-transparent" />
+            </div>
+          </div>
+
+        </div>
       </div>
+    </div>
   )
 }
 

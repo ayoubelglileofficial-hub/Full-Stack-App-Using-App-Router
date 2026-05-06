@@ -110,10 +110,10 @@ export function Header() {
     const paths = pathname.split("/").filter(Boolean)
     return (
         <header className={cn(
-            "sticky top-0 z-50 w-full transition-all duration-300",
-            scrolled ? "glass shadow-sm py-2" : "bg-transparent py-4"
+            "sticky top-0 z-50 w-full transition-all duration-300 ",
+            scrolled ? "glass shadow-sm py-2" : "bg-white dark:bg-black py-4"
         )}>
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 ">
                 <div className="flex items-center justify-between h-14">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 ml-8">
@@ -139,7 +139,7 @@ export function Header() {
                                         <ul className="grid gap-3 p-6 md:w-100 lg:w-125 lg:grid-cols-[1fr_.75fr]">
                                             <li className="row-span-3">
                                                 <NavigationMenu>
-                                                    <Link className="flex h-full w-56 select-none flex-col justify-end rounded-md bg-gradient-to-b from-green-500/50 to-green-600 p-6 no-underline outline-none focus:shadow-md" href="/about">
+                                                    <Link className="flex h-full w-56 select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-500/50 to-blue-600 p-6 no-underline outline-none focus:shadow-md" href="/about">
                                                         <Book className="h-6 w-6 text-white" />
                                                         <div className="mb-2 mt-4 text-lg font-medium text-white">
                                                             {/* Academic Excellence */}

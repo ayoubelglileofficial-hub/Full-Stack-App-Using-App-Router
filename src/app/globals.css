@@ -130,3 +130,36 @@
     @apply font-noto-sans;
   }
 }
+
+/* Filename - globals.css */
+
+@tailwind utilities;
+
+form>div {
+    @apply flex flex-col gap-2;
+}
+
+input,
+textarea {
+    @apply shadow-md px-6 py-2 border border-slate-300;
+}
+
+
+
+/* Image vert Animation */
+@keyframes floatY {
+  0%, 100% { transform: translateY(-5); }
+  50% { transform: translateY(-20px); }
+}
+
+.floatY {
+  animation: floatY 2s ease-in infinite;
+}
+
+.zoomIn {
+  transition: transform 0.3s ease;
+}
+
+.zoomIn:hover {
+  transform: scale(1.05);
+}
