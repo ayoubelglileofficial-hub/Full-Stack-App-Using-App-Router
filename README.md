@@ -20,6 +20,27 @@ https://www.youtube.com/watch?v=VE8BkImUciY&list=PLj-4DlPRT48mYFZcTiaC4GEHbi98Y5
 
 
 
+
+
+
+## ----------------------------- database Part --------------------------------
+-   startwhite the connect , the code hier C:\Users\12500031\Desktop\Next Js Project\Full Stack App Using App Router\src\utils\db.js
+-   after that Build awer schema (in folder "src/models/namechema.js)
+-   build the fil where we hand the CRUD syntaxe in (app/api/namethepartlikePOST/route.js) // route.js did'nt change like page.js , and to test it use that script in the fct     
+        return new NextResponse("IT works", {status:200})
+        and that url to see it http://localhost:3000/api/posts
+
+
+
+
+
+
+
+
+
+
+
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.

@@ -159,7 +159,7 @@ export function Header() {
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>
 
-                                <NavigationMenuItem>
+                                {/* <NavigationMenuItem>
                                     <NavigationMenuTrigger>
                                         Control panels
                                     </NavigationMenuTrigger>
@@ -178,7 +178,7 @@ export function Header() {
                                                 ))}
                                         </ul>
                                     </NavigationMenuContent>
-                                </NavigationMenuItem>
+                                </NavigationMenuItem> */}
 
 
 

@@ -1,15 +1,41 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import blogItems from './dbBlog'
+import NotFound from '../not-found';
+// import blogItems from './dbBlog'
 
-const Blog = () => {
+async function getData() {
+  try {
+    const res = await fetch("http://localhost:3001/blogItems", {
+      // Revalidate every 60 seconds (ISR)
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      // throw new Error(`API error: ${res.status} ${res.statusText}`);
+          return <NotFound />;
+      
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Data fetch failed:", error);
+    return null; // Return null so UI can handle gracefully
+  }
+}
+
+const Blog = async () => {
+    const data = await getData();
+      if (!data) {
+    return <NotFound />;
+
+  }
   return (
     <div className="w-[90%] mx-auto">
 
       {/* First item alone */}
       <div className="mb-10 w-[90%] mx-auto">
-        {blogItems.map((item, index) =>
+        {data.map((item, index) =>
           index === 0 ? (
             <div
               key={item.id}
@@ -40,10 +66,10 @@ const Blog = () => {
                 </p>
 
                 <Link
-                  href={item.url || "#"}
+                  href={`/blog/${item.id}`|| "#"}
                   className="inline-block px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 >
-                  check the website
+                  Blog Details
                 </Link>
               </div>
             </div>
@@ -53,7 +79,7 @@ const Blog = () => {
 
       {/* Rest of items */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-[90%] mx-auto">
-        {blogItems.map((item, index) =>
+        {data.map((item, index) =>
           index !== 0 ? (
             <div
               key={item.id}
@@ -80,10 +106,10 @@ const Blog = () => {
                 </p>
 
                 <Link
-                  href={item.url || "#"}
+                  href={`/blog/${item.id}`|| "#"}
                   className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm"
                 >
-                  check the website
+                  Blog Details
                 </Link>
               </div>
             </div>
