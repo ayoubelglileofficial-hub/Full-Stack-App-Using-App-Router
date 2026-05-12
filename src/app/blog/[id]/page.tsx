@@ -3,8 +3,10 @@ import React from "react";
 // import blogItems from '../../../../db.json'
 import NotFound from "@/app/not-found";
 import Image from "next/image";
+import type { Metadata } from "next";
 
-async function getData(id: string) {
+
+async function getblogData(id: string) {
   try {
     const res = await fetch(`http://localhost:3001/blogItems/${id}`, {
       next: { revalidate: 60 },
@@ -23,18 +25,56 @@ async function getData(id: string) {
   }
 }
 
+
 async function getAllItems() {
   const res = await fetch(`http://localhost:3001/blogItems?trend=true`, {
     next: { revalidate: 60 },
   });
   return res.ok ? res.json() : [];
 }
+
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const data = await getblogData(id);
+
+  if (!data || data?.props?.statusCode === 404) {
+    return {
+      title: "Post Not Found",
+      description: "This blog post could not be found.",
+    };
+  }
+
+  return {
+    title: `${data.title} | Blog`,
+    description: data.shortDesc,
+    openGraph: {
+      title: data.title,
+      description: data.shortDesc,
+      images: data.img ? [{ url: data.img, alt: data.title }] : [],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data.title,
+      description: data.shortDesc,
+      images: data.img ? [data.img] : [],
+    },
+  };
+}
+
+
+
 const BlogPost = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  // const data = await getData(id);
-  // const allTrending = await getData(id);
+  // const data = await getblogData(id);
+  // const allTrending = await getblogData(id);
 
-  const [data, allTrending] = await Promise.all([getData(id), getAllItems()]);
+  const [data, allTrending] = await Promise.all([getblogData(id), getAllItems()]);
 
   if (!data) {
     return <NotFound />;

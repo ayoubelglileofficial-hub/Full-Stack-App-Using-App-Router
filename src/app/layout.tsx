@@ -22,8 +22,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Next Js Project",
-  description: "Next Js Project",
+  title: "Full Stack App",
+  description: "Full Stack App using App Router",
 }
 
 export default function RootLayout({

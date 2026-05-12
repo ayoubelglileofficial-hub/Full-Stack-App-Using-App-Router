@@ -4,7 +4,7 @@ import React from 'react'
 import NotFound from '../not-found';
 // import blogItems from './dbBlog'
 
-async function getData() {
+async function getblogData() {
   try {
     const res = await fetch("http://localhost:3001/blogItems", {
       // Revalidate every 60 seconds (ISR)
@@ -25,7 +25,7 @@ async function getData() {
 }
 
 const Blog = async () => {
-    const data = await getData();
+    const data = await getblogData();
       if (!data) {
     return <NotFound />;
 

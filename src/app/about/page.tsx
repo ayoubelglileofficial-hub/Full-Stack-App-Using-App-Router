@@ -1,6 +1,12 @@
 import Button from '@/components/button'
 import Image from 'next/image'
 import React from 'react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'FSA - About',
+  description: 'About Page',
+}
 
 const About = () => {
   return (

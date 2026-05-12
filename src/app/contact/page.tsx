@@ -2,6 +2,12 @@ import Button from '@/components/button';
 import ContactForm from '@/components/ContaxtForm';
 import Image from 'next/image';
 import React from 'react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'FSA - ContactUs ',
+  description: '.FSA - ContactUs Page',
+}
 
 const Contact = async () => {
     await new Promise((res) => setTimeout(res, 1000)); // simulate delay

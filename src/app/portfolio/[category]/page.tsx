@@ -1,19 +1,85 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import {items, styleMap , iconMap} from '../dataP'
-import { FaGithub, FaFigma, FaExternalLinkAlt } from "react-icons/fa"
+import { styleMap, iconMap } from '../dataP'
 import NotFound from '@/app/not-found'
+import type { Metadata } from 'next'
 
+
+async function getPortfolioData(category: string) {
+  try {
+    const res = await fetch('http://localhost:3001/portfolioItems', {
+      next: { revalidate: 60 },
+    })
+
+    if (!res.ok) {
+      return null
+    }
+
+    const data = await res.json()
+
+    const item = data.find(
+      (i: any) => i.url === `/portfolio/${category}`
+    )
+
+    return item || null
+  } catch (error) {
+    console.error('Data fetch failed:', error)
+    return null
+  }
+}
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ category: string }> }
+): Promise<Metadata> {
+  const { category } = await params
+  const item = await getPortfolioData(category)
+
+  if (!item) {
+    return {
+      title: 'Not Found | Portfolio',
+      description: 'The requested portfolio item could not be found.',
+    }
+  }
+
+  return {
+    title: `${item.title} | Portfolio`,
+    description: item.desc[0],
+    openGraph: {
+      title: item.title,
+      description: item.desc[0],
+      images: [
+        {
+          url: item.img,
+          width: 1200,
+          height: 630,
+          alt: item.title,
+        },
+      ],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: item.title,
+      description: item.desc[0],
+      images: [item.img],
+    },
+    alternates: {
+      canonical: `https://yourdomain.com/portfolio/${category}`,
+    },
+  }
+}
 
 
 const CategoryPage = async ({ params }: { params: Promise<{ category: string }> }) => {
   const { category } = await params
 
-  const item = items.find((i) => i.url === `/portfolio/${category}`)
+  // const item = items.find((i) => i.url === `/portfolio/${category}`)
+  const item = await getPortfolioData(category)
+
 
   if (!item) {
     return (
-    <NotFound/>
+      <NotFound />
     )
   }
 
@@ -55,22 +121,22 @@ const CategoryPage = async ({ params }: { params: Promise<{ category: string }> 
 
 
       <div className="w-full lg:w-[90%]  flex flex-col lg:flex-row  gap-10">
-        <Image src={item.img} alt={item.title} width={500} height={800} className='rounded-md shadow-md'/>
+        <Image src={item.img} alt={item.title} width={500} height={800} className='rounded-md shadow-md' />
         <div>
           <div className="flex lg:flex-col gap-3 ">
-          {item.links.map((l) => (
-            <a
-              key={l.label}
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`inline-flex items-center gap-2 px-8 py-2 rounded-lg text-sm font-medium transition ${styleMap[l.icon]}`}
-            >
-              {iconMap[l.icon]}
-              {l.label}
-            </a>
-          ))}
-        </div>
+            {item.links.map((l) => (
+              <a
+                key={l.label}
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 px-8 py-2 rounded-lg text-sm font-medium transition ${styleMap[l.icon]}`}
+              >
+                {iconMap[l.icon]}
+                {l.label}
+              </a>
+            ))}
+          </div>
         </div>
 
       </div>
