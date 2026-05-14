@@ -27,7 +27,7 @@ async function getblogData(id: string) {
 
 
 async function getAllItems() {
-  const res = await fetch(`http://localhost:3001/blogItems?trend=true`, {
+  const res = await fetch(`http://localhost:3000/api/posts?trend=true`, {
     next: { revalidate: 60 },
   });
   return res.ok ? res.json() : [];
@@ -90,6 +90,7 @@ const BlogPost = async ({ params }: { params: Promise<{ id: string }> }) => {
                 src={data.img || "/placeholder.jpg"}
                 alt={data.title}
                 fill
+                unoptimized
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -150,6 +151,7 @@ const BlogPost = async ({ params }: { params: Promise<{ id: string }> }) => {
                         src={item.img || "/placeholder.jpg"}
                         alt={item.title}
                         fill
+                        unoptimized
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>

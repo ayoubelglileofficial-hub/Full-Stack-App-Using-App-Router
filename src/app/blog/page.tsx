@@ -2,52 +2,56 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import NotFound from '../not-found';
-// import blogItems from './dbBlog'
 
 async function getblogData() {
   try {
-    const res = await fetch("http://localhost:3001/blogItems", {
-      // Revalidate every 60 seconds (ISR)
+    const res = await fetch("http://localhost:3000/api/posts", {
       next: { revalidate: 60 },
     });
 
     if (!res.ok) {
-      // throw new Error(`API error: ${res.status} ${res.statusText}`);
-          return <NotFound />;
-      
+      // Don't return JSX here — this is a data function, not a component
+      throw new Error(`API error: ${res.status} ${res.statusText}`);
     }
 
-    return await res.json();
+    const result = await res.json();
+    
+    // Handle if API returns { success: true, data: [...] } or just [...]
+    return result.data || result;
+    
   } catch (error) {
     console.error("Data fetch failed:", error);
-    return null; // Return null so UI can handle gracefully
+    return null;
   }
 }
 
 const Blog = async () => {
-    const data = await getblogData();
-      if (!data) {
-    return <NotFound />;
+  const data = await getblogData();
 
+  if (!data || data.length === 0) {
+    return <NotFound />;
   }
+
   return (
     <div className="w-[90%] mx-auto">
 
-      {/* First item alone */}
+      {/* First item */}
       <div className="mb-10 w-[90%] mx-auto">
         {data.map((item, index) =>
           index === 0 ? (
             <div
-              key={item.id}
+              key={item._id}
               className="w-full flex flex-col lg:flex-row-reverse rounded-xl overflow-hidden shadow-xl border border-black/10 dark:border-white/10"
             >
-              {/* Image */}
+              {/* Image — use Next.js Image with unoptimized for external URLs, or regular img */}
               <div className="relative w-full h-[400px]">
                 <Image
                   src={item.img}
                   alt={item.title}
                   fill
                   className="object-cover"
+                  unoptimized // Add this for external URLs not in next.config.js
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
 
@@ -66,7 +70,7 @@ const Blog = async () => {
                 </p>
 
                 <Link
-                  href={`/blog/${item.id}`|| "#"}
+                  href={`/blog/${item.id}`}
                   className="inline-block px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 >
                   Blog Details
@@ -82,7 +86,7 @@ const Blog = async () => {
         {data.map((item, index) =>
           index !== 0 ? (
             <div
-              key={item.id}
+              key={item._id}
               className="w-full flex flex-col rounded-xl overflow-hidden shadow-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900"
             >
               {/* Image */}
@@ -92,6 +96,8 @@ const Blog = async () => {
                   alt={item.title}
                   fill
                   className="object-cover"
+                  unoptimized // Add this for external URLs
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
 
@@ -106,7 +112,7 @@ const Blog = async () => {
                 </p>
 
                 <Link
-                  href={`/blog/${item.id}`|| "#"}
+                  href={`/blog/${item._id}`}
                   className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm"
                 >
                   Blog Details
@@ -120,7 +126,5 @@ const Blog = async () => {
     </div>
   );
 };
-
-
 
 export default Blog

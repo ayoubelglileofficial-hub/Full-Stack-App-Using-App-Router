@@ -1,15 +1,18 @@
-import { NextResponse } from "next/server"
-import dbConnect from "@/utils/db"      // Fix #1: correct import name
-import User from "@/models/User"         // Fix #2: correct model
-
-export const GET = async (req) => {
-    try {
-        await dbConnect()
-        
-        const users = await User.find().select("-password")  // Fix #3: hide passwords, Fix #4: correct variable name
-        
-        return NextResponse.json(users, { status: 200 })
-    } catch(err) {
-        return NextResponse.json({ error: err.message }, { status: 500 })
-    }
+// app/api/posts/route.js
+export async function GET(request) {
+  try {
+    await connectDB();
+    const { searchParams } = new URL(request.url);
+    const trend = searchParams.get("trend");
+    
+    const query = trend === "true" ? { trend: true } : {};
+    const posts = await Post.find(query).sort({ createdAt: -1 });
+    
+    return NextResponse.json({ success: true, data: posts });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
 }

@@ -46,5 +46,6 @@ const BlogSchema = new Schema(
     }
 );
 
-// export default models.Blog || model("Blog", BlogSchema);
-export default models.Post || model("Post", BlogSchema);
+// Fixed export — prevents overwrite errors in dev with Next.js hot reload
+const Post = models.Post || model("Post", BlogSchema);
+export default Post;
