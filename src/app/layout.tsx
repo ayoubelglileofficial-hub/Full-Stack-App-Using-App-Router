@@ -1,9 +1,11 @@
+
 import type { Metadata } from "next"
 import { Geist, Geist_Mono, Noto_Sans } from "next/font/google"
 import "./globals.css"
 import { Header } from "@/components/layout/header"
 import { ThemeProvider } from "@/components/theme-provider"
 import Footer from "@/components/layout/footer"
+import AuthProvider from "@/components/authProvider/authProvider"
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -39,13 +41,15 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col justify-between">
         <ThemeProvider>
-          <Header />
-          <main 
-          // className="flex-1 w-full max-w-350 mx-auto  md:px-6 py-6"
-          >
-            {children}
-          </main>
-          <Footer/>
+          <AuthProvider>
+            <Header />
+            <main 
+            // className="flex-1 w-full max-w-350 mx-auto  md:px-6 py-6"
+            >
+              {children}
+            </main>
+            <Footer/>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

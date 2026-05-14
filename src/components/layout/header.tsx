@@ -11,6 +11,7 @@ import {
     Book,
     GraduationCap,
     LogOut,
+    LogOutIcon,
     Menu,
     Moon,
     MoonStar,
@@ -43,6 +44,8 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { signIn, signOut } from "next-auth/react"
+import { AuthButton, UserMenu } from "../UserMenu"
 const components: { title: string; href: string; description: string }[] = [
     {
         title: "لوحة تحكم المدير ", // لوحة تحكم المدير  dashboard Admin
@@ -159,27 +162,7 @@ export function Header() {
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>
 
-                                {/* <NavigationMenuItem>
-                                    <NavigationMenuTrigger>
-                                        Control panels
-                                    </NavigationMenuTrigger>
-                                    <NavigationMenuContent>
-                                        <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150">
-                                            {components
-                                                .filter((component) => {
-                                                    // Blog Admin only
-                                                    if (!user) return false
-                                                    return user.role === "admin" && component.href === "/dashboard/Admin"
-                                                })
-                                                .map((component) => (
-                                                    <ListItem key={component.title} title={component.title} href={component.href}>
-                                                        {component.description}
-                                                    </ListItem>
-                                                ))}
-                                        </ul>
-                                    </NavigationMenuContent>
-                                </NavigationMenuItem> */}
-
+                                
 
 
                             </NavigationMenuList>
@@ -194,36 +177,14 @@ export function Header() {
                                 Change the Mode
                             </span>
                         </Button>
-                        {user ? (
-                            <>
-                                <Link href="/notifications">
-                                    <Button variant="ghost" size="icon" className="rounded-full relative">
-                                        <Bell className="h-5 w-5" />
-                                        <span className="absolute top-1 left-1 h-2 w-2 bg-red-500 rounded-full"></span>
-                                    </Button>
-                                </Link>
-                                <Link href="/Dashboard" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
+                        {/* last update */}
+                                {/* <Button onClick={signIn} className="flex items-center bg-transparent gap-2 text-sm hover:text-primary transition-colors">
                                     <div className="bg-primary/10 p-2 rounded-full">
-                                        <User className="text-primary w-4 h-4" />
-                                        <span className="font-medium">
-                                            {user.name}
-                                        </span>
+                                        <LogOutIcon className="text-primary w-4 h-4" />
+                                        
                                     </div>
-                                </Link>
-                                <Button variant="ghost" size="sm" onClick={handleLogout} className="text-destructive hover:text-destructive/80">
-                                    <LogOut className="h-4 w-4 ml-2" />
-                                    {/* min 43:00 */}
-                                    logOut
-                                </Button>
-
-                            </>
-                        ) : (
-                            <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors">
-                                <Button variant="secondary" size="sm" className="rounded-full px-6">
-                                    login
-                                </Button>
-                            </Link>
-                        )}
+                                </Button> */}
+                                <UserMenu />
                     </div>
                     {/* mobile taggele */}
                     <div className="md:hidden flex items-center gap-4">
@@ -242,7 +203,7 @@ export function Header() {
                                 <SheetHeader>
                                     <SheetTitle className="text-right flex items-center gap-2">
                                         <GraduationCap className="h-6 w-6 text-primary">
-                                            قائمة ums
+                                        FSA MEENU 
                                         </GraduationCap>
                                     </SheetTitle>
                                 </SheetHeader>
@@ -258,76 +219,63 @@ export function Header() {
                                             </div>
                                         </div>
                                     )}
-                                    <div className="grid gap-2 ">
-                                        <h3>لوحة التحكم</h3>
-                                        {components.filter((component) => {
-                                            if (!user) return false;
-                                            if (user.role === "admin") return true;
-                                            if (user.role === "professor")
-                                                return component.href === "/dashboard/Professor";
-                                            if (user.role === "student")
-                                                return component.href === "/dashboard/student";
-                                            return false;
-                                        })
-                                            .map((component) => (
-                                                <ListItem key={component.title} title={component.title} href={component.href}>
-                                                    {component.description}
-                                                </ListItem>
-                                            ))}
-                                    </div>
-                                    <div className="grid gap-2 ">
-                                        {user ? (
-                                            <>
-                                                <Link href="/settings" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
-                                                    <Settings className=" w-4 h-4" />
-                                                    الأعدادات
-                                                </Link>
-                                                {/*  */}
-                                                <Button variant="ghost" size="sm" onClick={handleLogout} className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
-                                                    <LogOut className=" w-4 h-4" />
-                                                    {/* min 43:00 */}
-                                                    Logout
-                                                </Button>
+                                    <NavigationMenu>
+                            <NavigationMenuList className="space-x-5 flex flex-col">
+                                {/* Home */}
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink href="/" className={navigationMenuTriggerStyle()}>
+                                        Home
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                                {/* More Menu */}
+                                <NavigationMenuItem>
+                                    <NavigationMenuTrigger>
+                                        {/* The Academy */}
+                                        More
+                                    </NavigationMenuTrigger>
+                                    <NavigationMenuContent>
+                                        <ul className="grid gap-3 p-6 md:w-100 lg:w-125 lg:grid-cols-[1fr_.75fr]">
+                                            <li className="row-span-3">
+                                                <NavigationMenu>
+                                                    <Link className="flex h-full w-56 select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-500/50 to-blue-600 p-6 no-underline outline-none focus:shadow-md" href="/about">
+                                                        <Book className="h-6 w-6 text-white" />
+                                                        <div className="mb-2 mt-4 text-lg font-medium text-white">
+                                                            {/* Academic Excellence */}
+                                                            About
+                                                        </div>
+                                                        <p className="text-sm leading-tight text-white/90">
+                                                            {/*  Discover our global programmes */}
+                                                            About Us
+                                                        </p>
+                                                    </Link>
+                                                </NavigationMenu>
+                                            </li>
+                                            <ListItem href="/contact" title="contact" />
+                                            <ListItem href="/portfolio" title="portfolio" />
+                                            <ListItem href="/blog" title="blog" />
+                                        </ul>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
 
-                                            </>
-                                        ) : (
-                                            <Link href="/login" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
-                                                <User className=" w-4 h-4" />
-                                                login
-                                            </Link>
-                                        )}
+
+
+                            </NavigationMenuList>
+                        </NavigationMenu>
+                                    <div className="grid gap-6">
+                                        <Link href="/dashboard" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
+                                            <div className="flex gap-2 px-4 bg-primary/10 p-2 rounded-full">
+                                            <User className="text-primary w-4 h-4" />
+                                            <span className="font-medium">
+                                            Dashboard
+                                            </span>
+                                            </div>
+                                        </Link>
                                     </div>
                                 </div>
                             </SheetContent>
                         </Sheet>
                     </div>
                 </div>
-                {/* <div className="flex items-center mt-20 mx-10">
-                    {paths.map((path, index) => {
-                        const href = "/" + paths.slice(0, index + 1).join("/");
-                        const isLast = index === paths.length - 1;
-                        const title =
-                            arabicPaths[path] ||
-                            path.charAt(0).toUpperCase() + path.slice(1);
-
-                        return (
-                            <React.Fragment key={href}>
-                                {index > 0 && (
-                                    <BreadcrumbSeparator className="mx-2 text-muted-foreground flex" />
-                                )}
-                                <BreadcrumbSeparator className="mx-2 text-muted-foreground  hidden " />
-                                <BreadcrumbItem>
-
-                                    {isLast ? (
-                                        <BreadcrumbPage>{title}</BreadcrumbPage>
-                                    ) : (
-                                        <BreadcrumbLink href={href}>{title}</BreadcrumbLink>
-                                    )}
-                                </BreadcrumbItem>
-                            </React.Fragment>
-                        );
-                    })}
-                </div> */}
             </div>
         </header>
     );

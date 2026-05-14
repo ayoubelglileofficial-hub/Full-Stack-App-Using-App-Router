@@ -1,14 +1,11 @@
-
-
-
 import { NextResponse } from "next/server"
-import connect from "@/utils/db"
+import dbConnect from "@/utils/db"
 import Post from "@/models/Post"
 
 export const GET = async (req) => {
     try {
         console.log("1. Connecting to DB...")
-        await connect()
+        await dbConnect()
         console.log("2. Connected successfully!")
 
         console.log("3. Fetching posts...")

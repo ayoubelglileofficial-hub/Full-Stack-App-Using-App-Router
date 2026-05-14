@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const MONGODB = process.env.MONGODB_URI;
-// const MONGODB = process.env.MONGODB_URI1;
+// const MONGODB = process.env.MONGODB_URI_TEST;
 
 if (!MONGODB) {
   throw new Error(
@@ -34,3 +34,15 @@ async function dbConnect() {
 }
 
 export default dbConnect;
+
+// import mongoose from "mongoose";
+
+// const connect = async ()=>{
+
+// try {
+//   await mongoose.connect(process.env.MONGO);
+// } catch (error) {
+//     throw new Error("connection Faild!")
+// }
+// }
+// export default connect;

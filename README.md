@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=VE8BkImUciY&list=PLj-4DlPRT48mYFZcTiaC4GEHbi98Y5
 
 
 
-
+2:24:11
 
 
 
@@ -46,6 +46,18 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+
+## ----------------------------- Auth Part --------------------------------
+https://youtu.be/VE8BkImUciY?t=8085&si=wTYAX7rLxAD-WwHX
+install :       npm install next-auth@beta
+1       NextAuth configuration file or Auth API route handler.
+2       SessionProvider setup for NextAuth
+3       useSession part oin the dashbord page (the page behing auth folders)
+        remarq : mayby same time we neat to use NEXTAUTH_URL in .env
+4       build the login and register pages in eatch folder in Dashbord/(auth) folder
+        the register part (the POST req) link white api/auth/register/route.js like NextAuth
+
 
 ## Learn More
 
